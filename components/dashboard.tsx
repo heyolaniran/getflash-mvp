@@ -4,17 +4,29 @@ import { LogOut, User, BarChart, Settings, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import ProfileSettingsForm from '@/app/dashboard/profile-settings-form'
 import signOut from "@/hooks/signout"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import QrSection from "./qr-section"
+import SatsHistory from "./sats-history"
+import { SavingBalance } from "@/hooks/record-stable-sats-transactions"
 export default function Dashboard({ profile, user }: { profile: any, user: any }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [balance, setBalance] = useState<number>(0)
 
     const handleLogout = async () => {
         setIsLoading(true)
         await signOut()
         setIsLoading(false)
     }
+
+    useEffect(() => {
+        async function fetchBalance() {
+            setBalance(await SavingBalance())
+        }
+
+        fetchBalance()
+    }, [])
+
     return (
         <div className="min-h-screen bg-background text-foreground p-8 font-sans">
             <header className="flex justify-between items-center mb-12">
@@ -40,7 +52,7 @@ export default function Dashboard({ profile, user }: { profile: any, user: any }
             </header>
 
             <main className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <Card className="hover:shadow-md transition-savedAmount.data - withdrawalAmount.datashadow cursor-pointer">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">
                             Analytics
@@ -48,9 +60,9 @@ export default function Dashboard({ profile, user }: { profile: any, user: any }
                         <BarChart className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">+2350</div>
+                        <div className="text-2xl font-bold">{balance} USD</div>
                         <p className="text-xs text-muted-foreground">
-                            +180.1% from last month
+
                         </p>
                     </CardContent>
                 </Card>
@@ -78,6 +90,8 @@ export default function Dashboard({ profile, user }: { profile: any, user: any }
                     initialSavingPercentage={profile.saving_percentage || 0}
                 />
             </section>
+
+            <SatsHistory />
         </div>
     )
 }

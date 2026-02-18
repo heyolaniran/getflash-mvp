@@ -9,7 +9,7 @@ export async function GET(request: Request, context: { params: Promise<{ tag: st
 
     const lnUrlResponse = {
         tag: "payRequest",
-        callback: `${process.env.NEXT_PUBLIC_SITE_URL}/api/lnurlp/callback?tag=${tag}`,
+        callback: `https://ardelia-serpentiform-arboreally.ngrok-free.dev/api/lnurlp/callback?tag=${tag}`,
         maxSendable: 100000000,
         minSendable: 1000,
         metadata: JSON.stringify([

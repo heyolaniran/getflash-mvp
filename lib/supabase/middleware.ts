@@ -39,6 +39,9 @@ export async function updateSession(request: NextRequest) {
         !user &&
         !request.nextUrl.pathname.startsWith('/login') &&
         !request.nextUrl.pathname.startsWith('/auth') &&
+        !request.nextUrl.pathname.startsWith('/.well-known') &&
+        !request.nextUrl.pathname.startsWith('/api/lnurlp') &&
+        !request.nextUrl.pathname.startsWith('/api/webhook') &&
         request.nextUrl.pathname !== '/'
     ) {
         // If accessing protected route without user, redirect to login
