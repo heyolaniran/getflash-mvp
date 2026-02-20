@@ -3,7 +3,7 @@
 
 
 import { useFormStatus } from 'react-dom'
-import { updateProfile } from './actions'
+import { updateProfile } from '../app/profile/actions'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Loader2 } from 'lucide-react'
@@ -39,10 +39,17 @@ export default function ClientProfileForm({ initialTag }: { initialTag?: string 
     const [savingPercentage, setSavingPercentage] = useState(0)
 
     async function handleSubmit(formData: FormData) {
-        setError(null)
-        const result = await updateProfile(formData)
-        if (result?.error) {
-            setError(result.error)
+        try {
+            setError(null)
+            const result = await updateProfile(formData)
+            if (result?.error) {
+                setError(result.error)
+            }
+        } catch (error: any) {
+            if (error.message === 'NEXT_REDIRECT') {
+                throw error
+            }
+            setError(error instanceof Error ? error.message : String(error))
         }
     }
 
