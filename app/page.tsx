@@ -1,6 +1,6 @@
 
 import Link from 'next/link'
-import { ArrowRight, Sparkles, Zap, Shield } from 'lucide-react'
+import { ArrowRight, Sparkles, Zap, Shield, BitcoinIcon } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
@@ -19,9 +19,9 @@ export default async function Home() {
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold">
-              G
+              <BitcoinIcon className="w-6 h-6" />
             </div>
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">GetFlash</span>
+            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Easy Saver</span>
           </Link>
           <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <Link
@@ -48,19 +48,16 @@ export default async function Home() {
             New Experience
           </span>
           <h1 className="mb-6 text-4xl font-extrabold tracking-tight leading-tight text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
-            Launch your perfect <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">SaaS Platform</span>
+            Launch your perfect <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Get Paid in Sats but control your saving without volatility</span>
           </h1>
           <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
-            Complete the setup in seconds. Define your identity with a unique tag and start building your legacy with our powerful tools.
+            Set your Lightning address and decide how much you want to save in sats from each payment.
           </p>
           <div className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
             <Link href="/login" className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-900 transition-all shadow-lg hover:shadow-indigo-500/25">
               Start Now
               <ArrowRight className="ml-2 -mr-1 w-5 h-5" />
             </Link>
-            <a href="#" className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800 transition-all">
-              Learn more
-            </a>
           </div>
         </div>
       </section>
@@ -97,7 +94,7 @@ export default async function Home() {
       {/* Footer */}
       <footer className="bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 py-12">
         <div className="max-w-screen-xl mx-auto px-4 text-center text-gray-500 dark:text-gray-400">
-          <p>© 2024 GetFlash. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Easy Saver. All rights reserved.</p>
         </div>
       </footer>
     </div>
