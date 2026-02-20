@@ -1,18 +1,21 @@
 "use client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { LogOut, User, BarChart, Settings, Loader2 } from 'lucide-react'
+import { LogOut, User, BarChart, Settings, Loader2, Bitcoin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import signOut from "@/hooks/signout"
 import { useEffect, useState } from "react"
 import QrSection from "./qr-section"
 import SatsHistory from "./sats-history"
 import { SavingBalance } from "@/hooks/record-stable-sats-transactions"
+import { getSatsBalance } from "@/hooks/record-sats-transactions"
 import ProfileSettingsForm from "./profile-settings-form"
 export default function Dashboard({ profile, user }: { profile: any, user: any }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [balance, setBalance] = useState<number>(0)
+    const [balanceSats, setBalanceSats] = useState<number>(0)
     const [balanceLoading, setBalanceLoading] = useState<boolean>(false)
+    const [balanceSatsLoading, setBalanceSatsLoading] = useState<boolean>(false)
 
     const handleLogout = async () => {
         setIsLoading(true)
@@ -24,7 +27,10 @@ export default function Dashboard({ profile, user }: { profile: any, user: any }
         async function fetchBalance() {
             setBalanceLoading(true)
             setBalance(await SavingBalance())
+            setBalanceSatsLoading(true)
+            setBalanceSats(await getSatsBalance())
             setBalanceLoading(false)
+            setBalanceSatsLoading(false)
         }
 
         fetchBalance()
@@ -81,15 +87,15 @@ export default function Dashboard({ profile, user }: { profile: any, user: any }
                 <Card className="hover:shadow-md transition-shadow cursor-pointer">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">
-                            Settings
+                            Sats Balance
                         </CardTitle>
-                        <Settings className="h-4 w-4 text-muted-foreground" />
+                        <Bitcoin className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">Config</div>
-                        <p className="text-xs text-muted-foreground">
-                            Configure app preferences.
-                        </p>
+                        <div className="text-2xl font-bold">{balanceSatsLoading ? <div className="w-24 h-8 bg-muted animate-pulse rounded">
+
+                        </div> : `${balanceSats} sats`}</div>
+
                     </CardContent>
                 </Card>
             </main>
