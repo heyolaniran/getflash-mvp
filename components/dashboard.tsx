@@ -2,16 +2,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { LogOut, User, BarChart, Settings, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import ProfileSettingsForm from '@/app/dashboard/profile-settings-form'
 import signOut from "@/hooks/signout"
 import { useEffect, useState } from "react"
 import QrSection from "./qr-section"
 import SatsHistory from "./sats-history"
 import { SavingBalance } from "@/hooks/record-stable-sats-transactions"
+import ProfileSettingsForm from "./profile-settings-form"
 export default function Dashboard({ profile, user }: { profile: any, user: any }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [balance, setBalance] = useState<number>(0)
+    const [balanceLoading, setBalanceLoading] = useState<boolean>(false)
 
     const handleLogout = async () => {
         setIsLoading(true)
@@ -21,7 +22,9 @@ export default function Dashboard({ profile, user }: { profile: any, user: any }
 
     useEffect(() => {
         async function fetchBalance() {
+            setBalanceLoading(true)
             setBalance(await SavingBalance())
+            setBalanceLoading(false)
         }
 
         fetchBalance()
@@ -52,15 +55,23 @@ export default function Dashboard({ profile, user }: { profile: any, user: any }
             </header>
 
             <main className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <Card className="hover:shadow-md transition-savedAmount.data - withdrawalAmount.datashadow cursor-pointer">
+                <Card className="hover:shadow-md transition-shadow cursor-pointer">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">
-                            Analytics
+                            You saved
                         </CardTitle>
                         <BarChart className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{balance} USD</div>
+                        <div className="text-2xl font-bold">
+                            {balanceLoading ?
+                                <>
+                                    <div className="w-24 h-8 bg-muted animate-pulse rounded">
+
+                                    </div>
+
+                                </> : `${balance} USD`}
+                        </div>
                         <p className="text-xs text-muted-foreground">
 
                         </p>

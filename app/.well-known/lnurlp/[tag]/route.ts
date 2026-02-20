@@ -9,12 +9,12 @@ export async function GET(request: Request, context: { params: Promise<{ tag: st
 
     const lnUrlResponse = {
         tag: "payRequest",
-        callback: `https://ardelia-serpentiform-arboreally.ngrok-free.dev/api/lnurlp/callback?tag=${tag}`,
+        callback: `https://${process.env.NEXT_PUBLIC_DOMAIN}/api/lnurlp/callback?tag=${tag}`,
         maxSendable: 100000000,
         minSendable: 1000,
         metadata: JSON.stringify([
             ["text/plain", `Pay to @${tag} via Flash`],
-            ["text/identifier", `${tag}@getflashy.xyz`]
+            ["text/identifier", `${tag}@${process.env.NEXT_PUBLIC_DOMAIN}`]
         ]),
         commentAllowed: 500,
 
@@ -22,7 +22,7 @@ export async function GET(request: Request, context: { params: Promise<{ tag: st
 
     return NextResponse.json(lnUrlResponse, {
         headers: {
-            'Access-Control-Allow-Origin': '*', // Required by LNURL spec
+            'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
         },
     });

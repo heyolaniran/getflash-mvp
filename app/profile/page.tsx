@@ -1,7 +1,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import ClientProfileForm from './client-profile-form'
+import ClientProfileForm from '../../components/client-profile-form'
 
 export default async function ProfilePage() {
     const supabase = await createClient()

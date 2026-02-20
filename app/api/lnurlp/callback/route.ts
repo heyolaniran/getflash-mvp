@@ -2,12 +2,13 @@
 import checkTagExist from "@/hooks/check-tag-exist";
 import recordSatsTransactions from "@/hooks/record-sats-transactions";
 import recordStableSatsTransactions from "@/hooks/record-stable-sats-transactions";
+import { getLnInvoice } from "@/hooks/blink/get-ln-invoice";
 import { NextResponse } from "next/server";
 export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const tag = searchParams.get("tag")
-    const amount = parseInt(searchParams.get("amount")!) / 1000
+    const amount = parseInt(searchParams.get("amount")!) / 1000 // convert from millisats to sats 
 
     if (!amount || !tag)
         return NextResponse.json({ error: "Amount and tag are required" }, { status: 400 });
@@ -21,21 +22,10 @@ export async function GET(request: Request) {
     console.log("Tag exist", tagExist);
     // now create the invoice with the specific amount.
 
-    const query = 'mutation LnInvoiceCreate($input : LnInvoiceCreateInput!) { lnInvoiceCreate(input: $input) { invoice { paymentRequest paymentHash paymentSecret satoshis } errors { message } } }'
-
     try {
-        const response = await fetch(process.env.BLINK_ENDPOINT!, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-API-KEY': process.env.BLINK_KEY!
-            },
-            body: JSON.stringify({ query: query, variables: { input: { amount: Number(amount), memo: "Payment for " + tag, walletId: process.env.BLINK_BTC_WALLET! } } })
-        })
 
-        const payload = await response.json();
 
-        console.log("Payload", payload.data)
+        const payload = await getLnInvoice({ amount, tag });
 
         if (payload.errors) {
             console.log("Error", payload.errors[0].message)

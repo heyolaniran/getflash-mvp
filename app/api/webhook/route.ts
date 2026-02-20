@@ -1,3 +1,5 @@
+import { getUsdInvoice } from "@/hooks/blink/get-usd-invoice";
+import { payUsdInvoice } from "@/hooks/blink/pay-usd-invoice";
 import getBitcoinPrice from "@/hooks/get-bitcoin-price";
 import { getStableSatsRelated } from "@/hooks/record-stable-sats-transactions";
 import updateSatsTransactions from "@/hooks/update-sats-transactions";
@@ -55,24 +57,11 @@ export async function POST(request: Request) {
             const settlementAmount = Math.round(((stableSatRelated[0].amount * price) / 100000000) * 100); // get the sats amount in USD cent
 
 
-            console.log('Generate settlement amount', settlementAmount);
+            const payload = await getUsdInvoice({ amount: settlementAmount });
 
-            const query = 'mutation LnUsdInvoiceCreate($input: LnUsdInvoiceCreateInput!) { lnUsdInvoiceCreate(input: $input) { invoice {paymentRequest paymentHash paymentSecret satoshis} errors {message}}}'
+            console.log("USD GET Payload", payload)
 
-            const response = await fetch(process.env.BLINK_ENDPOINT!, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-API-KEY': process.env.BLINK_KEY!
-                },
-                body: JSON.stringify({ query: query, variables: { input: { amount: Number(settlementAmount), memo: "Payment for " + body.transaction.id, walletId: process.env.BLINK_USD_WALLET! } } })
-            })
-
-            const payload = await response.json();
-
-            console.log("Payload", payload.data)
-
-            if (payload.errors) {
+            if (!payload || payload.errors) {
                 console.log("Error", payload.errors[0].message)
                 return NextResponse.json({ error: payload.errors[0].message }, { status: 500 });
             }
@@ -89,22 +78,11 @@ export async function POST(request: Request) {
 
             // then pay that invoice 
 
-            const payQuery = 'mutation LnInvoicePaymentSend ($input: LnInvoicePaymentInput!) { lnInvoicePaymentSend(input: $input) { status errors { message path code }}}';
+            const payPayload = await payUsdInvoice({ paymentRequest: payload.data.lnUsdInvoiceCreate.invoice.paymentRequest });
 
-            const payResponse = await fetch(process.env.BLINK_ENDPOINT!, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-API-KEY': process.env.BLINK_KEY!
-                },
-                body: JSON.stringify({ query: payQuery, variables: { input: { paymentRequest: payload.data.lnUsdInvoiceCreate.invoice.paymentRequest, walletId: process.env.BLINK_BTC_WALLET! } } })
-            })
+            console.log("USD Pay Payload", payPayload.data)
 
-            const payPayload = await payResponse.json();
-
-            console.log("Pay Payload", payPayload.data)
-
-            if (payPayload.errors) {
+            if (!payPayload || payPayload.errors) {
                 console.log("Error", payPayload.errors[0].message)
                 return NextResponse.json({ error: payPayload.errors[0].message }, { status: 500 });
             }

@@ -13,7 +13,8 @@ import {
     CardTitle,
 } from '@/components/ui/card'
 import { Loader2 } from 'lucide-react'
-import { updateProfileSettings } from './actions'
+import { updateProfileSettings } from '@/app/dashboard/actions'
+import { toast } from 'sonner'
 
 function SubmitButton() {
     const { pending } = useFormStatus()
@@ -35,15 +36,20 @@ export default function ProfileSettingsForm({
     initialSavingPercentage,
 }: ProfileSettingsFormProps) {
     const [savingPercentage, setSavingPercentage] = useState(initialSavingPercentage)
-    const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
-
     async function handleSubmit(formData: FormData) {
-        setMessage(null)
-        const result = await updateProfileSettings(formData)
-        if (result?.error) {
-            setMessage({ type: 'error', text: result.error })
-        } else if (result?.success) {
-            setMessage({ type: 'success', text: result.success })
+        try {
+
+            const result = await updateProfileSettings(formData)
+            if (result?.error) {
+                toast.error(result.error)
+            } else if (result?.success) {
+                toast.success(result.success)
+            }
+        } catch (error: any) {
+            if (error.message === 'NEXT_REDIRECT') {
+                throw error
+            }
+            toast.error(error instanceof Error ? error.message : String(error))
         }
     }
 
@@ -92,17 +98,6 @@ export default function ProfileSettingsForm({
                             Percentage of payment to automatically convert/save.
                         </p>
                     </div>
-
-                    {message && (
-                        <div
-                            className={`p-3 rounded-md text-sm ${message.type === 'error'
-                                ? 'bg-destructive/10 text-destructive'
-                                : 'bg-primary/10 text-primary'
-                                }`}
-                        >
-                            {message.text}
-                        </div>
-                    )}
 
                     <div className="flex justify-end">
                         <SubmitButton />
