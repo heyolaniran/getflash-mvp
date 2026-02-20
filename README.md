@@ -1,7 +1,7 @@
 
-# GetFlash MVP
+#  Easy Saver
 
-A SaaS platform with streamlined user onboarding and profile customization.
+Get paid in Sats but control your saving without volatility
 
 ## Features
 
