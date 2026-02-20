@@ -21,7 +21,7 @@ export default async function Home() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold">
               G
             </div>
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">GetFlash</span>
+            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Easy Saver</span>
           </Link>
           <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <Link
@@ -97,7 +97,7 @@ export default async function Home() {
       {/* Footer */}
       <footer className="bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 py-12">
         <div className="max-w-screen-xl mx-auto px-4 text-center text-gray-500 dark:text-gray-400">
-          <p>© 2024 GetFlash. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Easy Saver. All rights reserved.</p>
         </div>
       </footer>
     </div>
