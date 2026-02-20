@@ -15,10 +15,10 @@ export async function updateProfileSettings(formData: FormData) {
         return { error: 'Unauthorized' }
     }
 
-    const customTag = (formData.get('custom_tag') as string).trim().toLowerCase()
+    const customTag = (formData.get('custom_tag') as string)?.trim().toLowerCase() || null
     const savingPercentage = parseInt(formData.get('saving_percentage') as string) || 0
 
-    if (!customTag || customTag.length < 3) {
+    if (customTag && customTag.length < 3) {
         return { error: 'Custom tag must be at least 3 characters long' }
     }
 
@@ -29,7 +29,7 @@ export async function updateProfileSettings(formData: FormData) {
     const { error } = await supabase
         .from('profiles')
         .update({
-            custom_tag: customTag,
+            ...(customTag && { custom_tag: customTag }),
             saving_percentage: savingPercentage,
             updated_at: new Date().toISOString(),
         })
