@@ -1,6 +1,6 @@
 
 import Link from 'next/link'
-import { ArrowRight, Sparkles, Zap, Shield } from 'lucide-react'
+import { ArrowRight, Sparkles, Zap, Shield, BitcoinIcon } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
@@ -19,7 +19,7 @@ export default async function Home() {
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold">
-              G
+              <BitcoinIcon className="w-6 h-6" />
             </div>
             <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Easy Saver</span>
           </Link>
@@ -48,7 +48,7 @@ export default async function Home() {
             New Experience
           </span>
           <h1 className="mb-6 text-4xl font-extrabold tracking-tight leading-tight text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
-            Launch your perfect <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Get paid in Sats but control your saving without volatility</span>
+            Launch your perfect <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Get Paid in Sats but control your saving without volatility</span>
           </h1>
           <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
             Set your Lightning address and decide how much you want to save in sats from each payment.
